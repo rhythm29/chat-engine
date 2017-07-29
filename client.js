@@ -3,6 +3,8 @@ Sends a msg to another client B, via char server. Client also listens
 on a port specified by commandline so that the server can push the
 messages from other client
 */
+var config = require('./config');
+
 const express = require('express')
 const clientApp = express()
 const bodyParser = require('body-parser');
@@ -46,7 +48,7 @@ function register(name,port){
   ret['port'] = port;
   console.log(JSON.stringify(ret))
 	var options = {
-    url: "http://localhost:3000/register",
+    url: "http://"+config.SERVER_URL+":"+config.SERVER_PORT+"/register",
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

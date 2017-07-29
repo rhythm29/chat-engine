@@ -2,6 +2,8 @@
 Receives a message from client and then forward it to receiver
 mentioned in the message 
 */
+var config = require('./config');
+
 var clients = {}; //Contains name to port mapping of each client
 const express = require('express')
 const app = express()
@@ -29,8 +31,8 @@ app.post('/register', function (req, res) {
   
 });
 
-app.listen(3000, function () {
-  console.log('I am the server 3000!')
+app.listen(config.SERVER_PORT, function () {
+  console.log('I am the server at:'+config.SERVER_PORT)
 });
 
 // relay the message received by a client to other client.
