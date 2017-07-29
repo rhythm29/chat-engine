@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html>
   <head>
+
+      <style>
+      table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+      }
+
+      td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+      }
+
+      tr:nth-child(even) {
+          background-color: #dddddd;
+      }
+      </style>
+
+  
       <meta charset="utf-8">
       <title><%= name %>'s Board</title>
 
   </head>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+  socket.on('chat message', function(msg){
+    appendMsg(msg)
+  });
+  </script>  
   <body>
   <h1> Welcome <%= name %> </h1>
     <form id = "chat" method= "post">
@@ -13,27 +40,35 @@
       <input type="text" name="receiver" />
       <input type="hidden" name="sender" value= "<%= name %>" />
       <input type="hidden" name="type" value="push" />
-
       </label>
       <label>
       Message:
-      <input type="text" name="msg" />
+      <input type="text" id="myMsg" name="msg" />
       </label>
       <input type="button" onClick="send()" name="action" value="Submit" />
     </form>
+    <table id = 'chats'></table>
     <script>
-      function send(){
-       var xhttp = new XMLHttpRequest();
-       xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-         document.getElementById("chat").innerHTML = this.responseText;
-        }
-      };
-     xhttp.open("POST", "http://localhost:3000", true);
-      xhttp.setRequestHeader("Content-type", "application/json");
-     xhttp.send(JSON.stringify(objectifyForm(document.getElementById("chat"))));
-    }
 
+      function appendMsg(msg){
+        var x = document.getElementById('chats');
+        var tr = document.createElement('tr');
+        var td = document.createElement('td');
+        td.innerHTML = msg;
+        tr.appendChild(td)
+        x.appendChild(tr);
+      }
+      function send(){
+        appendMsg("<%= name %>:"+document.getElementById("myMsg").value)
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+          }
+      };
+      xhttp.open("POST", "http://localhost:3000", true);
+      xhttp.setRequestHeader("Content-type", "application/json");
+      xhttp.send(JSON.stringify(objectifyForm(document.getElementById("chat"))));
+      }
 
       function objectifyForm(formArray) {//serialize data function
         var obj = {};
@@ -47,16 +82,3 @@
     </script>
   </body>
 </html>
-
-<!--
- Object { name="Mangat",  msg="Du Hast",  ="Submit"}
-
- var msg = {
-  "sender": client1,
-  "receiver": client2,
-  "type": "push",
-  "msg": "Ich Leibe Berlin"
-};
-
-
--->

@@ -8,7 +8,10 @@ const clientApp = express()
 const bodyParser = require('body-parser');
 var request=require('request');
 var cors = require('cors');
+var http = require('http').Server(clientApp);
+var io = require('socket.io')(http);
 
+var msg;
 
 clientApp.set('view engine', 'ejs');
 
@@ -18,19 +21,19 @@ var args = process.argv.slice(2);
 console.log(args)
 var client1 = args[0];
 var clientPort = parseInt(args[1]);
-var msg;
 clientApp.post('/', function (req, res){
   res.setHeader('Access-Control-Allow-Origin', '*');
   console.log(req.body.msg);
   msg = req.body.msg
+  io.emit('chat message',req.body.sender+":"+msg);
   res.send('{"msg":"ok"}')    
 });
 
 clientApp.get('/', function (req, res){
-  res.render('chat', {name: msg})    
+  res.render('chat', {name: client1})    
 });
 
 
-clientApp.listen(clientPort, function () {
+http.listen(clientPort, function () {
   console.log('I am the Chat client running at ' + clientPort)
 })
