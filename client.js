@@ -10,15 +10,15 @@ var request=require('request');
 var cors = require('cors');
 var http = require('http').Server(clientApp);
 var io = require('socket.io')(http);
+var path = require('path');
 
-var msg;
 
 clientApp.set('view engine', 'ejs');
-
+clientApp.use(express.static(__dirname + '/public'));
 clientApp.use(bodyParser.json());
 clientApp.use(cors()); 
 var args = process.argv.slice(2);
-console.log(args)
+
 var client = args[0];
 var clientPort = parseInt(args[1]);
 
@@ -26,9 +26,8 @@ register(client,clientPort);
 
 clientApp.post('/', function (req, res){
   res.setHeader('Access-Control-Allow-Origin', '*');
-  console.log(req.body.msg);
-  msg = req.body.msg
-  io.emit('chat message',req.body.sender+":"+msg);
+  // send message to web UI.
+  io.emit('chat message',req.body.sender+":"+req.body.msg);
   res.send('{"msg":"ok"}')    
 });
 
@@ -42,11 +41,11 @@ http.listen(clientPort, function () {
 })
 
 function register(name,port){
-	  var ret = {}
-	  ret['name'] = name;
-	  ret['port'] = port;
-	  console.log(JSON.stringify(ret))
-		var options = {
+  var ret = {}
+  ret['name'] = name;
+  ret['port'] = port;
+  console.log(JSON.stringify(ret))
+	var options = {
     url: "http://localhost:3000/register",
     method: 'POST',
     headers: {
@@ -61,5 +60,4 @@ function register(name,port){
       	process.exit(-1)
       }
     });
-
 }

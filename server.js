@@ -14,11 +14,12 @@ app.use(bodyParser.json());
 app.post('/', function (req, res) {
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	console.log(req.body)
-  	sendChatFurther(req.body)	
+  	relayChat(req.body)	
   	res.send('{"msg":"ok"}')
   
 });
 
+// Save client name to port mapping.
 app.post('/register', function (req, res) {
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	console.log(req.body)
@@ -32,7 +33,8 @@ app.listen(3000, function () {
   console.log('I am the server 3000!')
 });
 
-function sendChatFurther(body){
+// relay the message received by a client to other client.
+function relayChat(body){
 	sender = body['sender'];
 	receiver = body['receiver'];
 	var options = {

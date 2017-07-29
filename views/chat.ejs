@@ -1,28 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      table {
-          font-family: arial, sans-serif;
-          border-collapse: collapse;
-          width: 100%;
-      }
-
-      td, th {
-          border: 1px solid #dddddd;
-          text-align: left;
-          padding: 8px;
-      }
-
-      tr:nth-child(even) {
-          background-color: #dddddd;
-      }
-      </style>
-
-
-      <meta charset="utf-8">
-      <title><%= name %>'s Board</title>
-
+    <meta charset="utf-8">
+    <title><%= name %>'s Board</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/client.css" />
   </head>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -44,11 +25,17 @@
       Message:
       <input type="text" id="myMsg" name="msg" />
       </label>
-      <input type="button" onClick="send()" name="action" value="Submit" />
+      <input type="submit" name="action" value="Submit" />
     </form>
     <table id = 'chats'></table>
     <script>
+      const element = document.querySelector('form');
+      element.addEventListener('submit', event => {
+      send();
+      event.preventDefault();
+      });
 
+      // appends messages in the table.
       function appendMsg(msg){
         var x = document.getElementById('chats');
         var tr = document.createElement('tr');
@@ -57,6 +44,7 @@
         tr.appendChild(td)
         x.appendChild(tr);
       }
+      // send message to chat server
       function send(){
         appendMsg("<%= name %>:"+document.getElementById("myMsg").value)
         var xhttp = new XMLHttpRequest();
@@ -66,10 +54,11 @@
       };
       xhttp.open("POST", "http://localhost:3000", true);
       xhttp.setRequestHeader("Content-type", "application/json");
-      xhttp.send(JSON.stringify(objectifyForm(document.getElementById("chat"))));
+      xhttp.send(JSON.stringify(createObject(document.getElementById("chat"))));
       }
 
-      function objectifyForm(formArray) {//serialize data function
+      //Create JSON object on the basis of form values
+      function createObject(formArray) {
         var obj = {};
         obj.sender = 
         obj.type = "push"
