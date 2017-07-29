@@ -9,6 +9,8 @@ const bodyParser = require('body-parser');
 var request=require('request');
 
 
+clientApp.set('view engine', 'ejs');
+
 clientApp.use(bodyParser.json());
 var args = process.argv.slice(2);
 console.log(args)
@@ -19,6 +21,10 @@ var clientPort = parseInt(args[2]);
 clientApp.post('/', function (req, res){
   console.log(req.body.msg);
   res.send('{"msg":"ok"}')    
+});
+
+clientApp.get('/', function (req, res){
+  res.render('chat', {name: client1})    
 });
 
 

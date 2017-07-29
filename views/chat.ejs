@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <title><%= name %>'s Board</title>
+
+  </head>
+  <body>
+  <h1> Welcome <%= name %> </h1>
+    <form id = "chat" method= "post">
+      <label>
+      Receiver:
+      <input type="text" name="name" />
+      </label>
+      <label>
+      Message:
+      <input type="text" name="msg" />
+      </label>
+      <input type="button" onClick="print()" value="Submit" />
+    </form>
+    <script>
+      function print(){
+        console.log(objectifyForm(document.getElementById("chat")))
+      }
+      function objectifyForm(formArray) {//serialize data function
+        var returnArray = {};
+        for (var i = 0; i < formArray.length; i++){
+         returnArray[formArray[i]['name']] = formArray[i]['value'];
+        }
+        return returnArray;
+      }
+    </script>
+  </body>
+</html>
