@@ -1,2 +1,2 @@
-curl "http://localhost:4000" -d'{"test":"OK"}'
+curl "http://localhost:3000" -d'{"test":"OK"}'
 

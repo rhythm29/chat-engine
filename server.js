@@ -6,18 +6,21 @@ mentioned in the message
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
+var cors = require('cors');
 
+app.use(cors()); 
 app.use(bodyParser.json());
 
 app.post('/', function (req, res) {
-	console.log("hello")
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	console.log(req.body)
   	sendChatFurther(req.body)	
   	res.send('{"msg":"ok"}')
   
 });
 
-app.listen(4000, function () {
-  console.log('I am the server 4000!')
+app.listen(3000, function () {
+  console.log('I am the server 3000!')
 });
 
 function sendChatFurther(body){
